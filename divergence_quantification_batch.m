@@ -39,8 +39,14 @@ for file_list = 1:n_files
         ['divergence_average_', output_name, '.mat']), ...
         'diverg_average');
     
+%     % save [diverg_all]: all divergence vectors [A.U.]
+%     save(fullfile(directory, ...
+%         ['divergence_all_', output_name, '.mat']), ...
+%         'diverg_all');
+    
     % clear output variables
-    clear diverg diverg_average
+    clear diverg diverg_average 
+%     clear diverg_all
     
 end
 

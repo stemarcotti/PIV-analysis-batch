@@ -1,4 +1,5 @@
 function [diverg, diverg_average] = div_quantification(directory, file, d, cell_ID)
+% function [diverg, diverg_average, diverg_all] = div_quantification(directory, file, d, cell_ID)
 
 dilationSize = 4;
 erosionSize = 12;
@@ -12,6 +13,7 @@ nt = length(flow);
 
 % initialise output vector
 diverg = zeros(nt-1, 1);
+% diverg_all = [];
 
 for jj = 1:nt-1
     
@@ -47,9 +49,15 @@ for jj = 1:nt-1
         div_mask(lim == 0) = NaN;
     end
     
+%     % save all divergence vectors [A.U.]
+%     diverg_all_temp = div_mask(:);
+%     diverg_all_temp = diverg_all_temp(~isnan(diverg_all_temp)); % remove NaNs
+%     diverg_all = [diverg_all; diverg_all_temp];
+    
     % save mean divergence [A.U.]
     diverg(jj,1) = nanmean(div_mask, 'all');
     
+%     clear diverg_all_temp
 end
 
 % average across all frames [A.U.]
