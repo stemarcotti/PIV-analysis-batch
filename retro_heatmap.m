@@ -25,9 +25,9 @@ connectivityFill = 4;
 for j = 1:length(flow)
     
     % calculate angle flow field to direction of motion
-    cosine = zeros(length(m), length(n));
-    for ii = 1:length(m)
-        for jj = 1:length(n)
+    cosine = zeros(size(m,1), size(m,2));
+    for ii = 1:size(m,1)
+        for jj = 1:size(m,2)
             
             A = [track_diff(j,1) track_diff(j,2)];
             B = [flow(j).vx(ii,jj) flow(j).vy(ii,jj)];
