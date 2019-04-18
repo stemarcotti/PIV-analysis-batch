@@ -1,7 +1,7 @@
 function autocorr = autocorr_quantification(vec)
 
 % smooth
-vec = [smooth(vec(:,1),3) smooth(vec(:,2),3)];
+vec = [smooth(vec(:,1),5) smooth(vec(:,2),5)];
 N = length(vec);
 
 % initialise

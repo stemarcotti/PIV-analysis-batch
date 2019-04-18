@@ -40,10 +40,10 @@ for file_list = 1:n_files
     track_diff = [diff(track(:,1)) diff(track(:,2))];       % distance between subsequent frames [um] (vect components)
     autocorr_celltrack = autocorr_quantification(track_diff);
     
-    % save [autocorr_celltrack]
-    save(fullfile(directory, ...
-        ['autocorr_celltrack_', output_name, '.mat']), ...
-        'autocorr_celltrack');
+%     % save [autocorr_celltrack]
+%     save(fullfile(directory, ...
+%         ['autocorr_celltrack_', output_name, '.mat']), ...
+%         'autocorr_celltrack');
     
     autocorr_celltrack_all(file_list).autocorr = autocorr_celltrack;
     
@@ -53,9 +53,9 @@ for file_list = 1:n_files
     
 end
 
-save(fullfile(parent_d, ...
-        'ctrl_autocorr_celltrack.mat'), ...
-        'autocorr_celltrack_all');
+% save(fullfile(parent_d, ...
+%         'ctrl_autocorr_celltrack.mat'), ...
+%         'autocorr_celltrack_all');
 
 %% calculate average decay across all files %%
 
@@ -65,7 +65,6 @@ for ii = 1:file_list
     len(ii,1) = length(autocorr_celltrack_all(ii).autocorr);
 end
 max_len = max(len);
-max_len_idx = find(len == max_len);
 
 % initialise matrix
 out = zeros(max_len, file_list);
@@ -85,12 +84,12 @@ for ii = 1:file_list
         weights(jj,ii) = out(jj, ii)*length(out(~isnan(out(:,ii))));
     end
 end
-numerator = sum(weights,max_len_idx);
+numerator = sum(weights,2);
 denominator = sum(len);
 weighted_avg = numerator / denominator; 
 
 save(fullfile(parent_d, ...
-        'ctrl_autocorr_celltrack_weighted_avg.mat'), ...
+        'wound_autocorr_celltrack_weighted_avg.mat'), ...
         'weighted_avg');
     
 %% use spline fitting instead of walking average %%
@@ -98,7 +97,7 @@ save(fullfile(parent_d, ...
 % this should account for the different frame intervals
 figure
 
-frame_int = [5; 5; 5; 5; 5; 5; 9; 8; 8];    % [s]
+frame_int = [7; 5; 7; 5];    % [s]
 
 for k = 1:file_list
     
@@ -109,7 +108,7 @@ for k = 1:file_list
     ft = fittype('smoothingspline');
     
     % Fit model to data.
-    [fitresult, gof] = fit(xData, yData, ft, opts);
+    [fitresult, gof] = fit(xData, yData, ft);
     
     out_fit(:,k) = fitresult(1:5:max_len*5);
     plot(x, out(:,k), 'k.');
@@ -122,5 +121,12 @@ for k = 1:file_list
     clear x
 end
 
+mask = isnan(out);
+out_fit(mask == 1) = NaN;
+
 x_avg = 1:5:max_len*5;  % [s]
-fit_avg = mean(out_fit,2);
+fit_avg = nanmean(out_fit,2);
+
+save(fullfile(parent_d, ...
+        'wound_autocorr_celltrack_fit_avg.mat'), ...
+        'fit_avg', 'x_avg');
