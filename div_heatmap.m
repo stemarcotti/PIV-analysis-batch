@@ -1,7 +1,9 @@
 function div_heatmap(directory, file, d, cell_ID, output_name, max_colorscale)
 
 % parameters
-dx = 5;
+% dx = 25;	% monolayer
+% dy = 25;
+dx = 5;     % haemocytes
 dy = 5;
 dilationSize = 4;
 erosionSize = 12;
@@ -42,6 +44,12 @@ for jj = 1:nt-1
     
     cellOutline1 = detectObjectBw(currentFrame, dilationSize, erosionSize, connectivityFill);
     cellOutline2 = detectObjectBw(nextFrame, dilationSize, erosionSize, connectivityFill);
+%     % no edge option
+%     cellOutline1 = logical(currentFrame);
+%     cellOutline1 = imfill(cellOutline1, 'holes');
+%     cellOutline2 = logical(nextFrame);
+%     cellOutline2 = imfill(cellOutline2, 'holes');
+    
     
     cellOutline = cellOutline1 .* cellOutline2;
     
