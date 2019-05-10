@@ -49,19 +49,22 @@ for file_list = 1:n_files
     stream = stream.stream_end_pts;
     
     % find coordinates primary sink
-    s = zeros(nt, 2);
+    s = zeros(nt, 2).*NaN;
     for k = 1:nt
         
-        stream_temp(:,1) = stream(k).xf;
-        stream_temp(:,2) = stream(k).yf;
-        stream_temp(:,3) = stream(k).f;
-        
-        idx = find(stream_temp(:,3) == max(stream_temp(:,3)));
-        
-        s(k,1) = stream_temp(idx,1);
-        s(k,2) = stream_temp(idx,2);
-        
-        clear stream_temp idx
+        if isempty(stream(k).xf) ~= 1
+            stream_temp(:,1) = stream(k).xf;
+            stream_temp(:,2) = stream(k).yf;
+            stream_temp(:,3) = stream(k).f;
+            
+            idx = find(stream_temp(:,3) == max(stream_temp(:,3)));
+            idx = idx(1);
+            
+            s(k,1) = stream_temp(idx,1);
+            s(k,2) = stream_temp(idx,2);
+            
+            clear stream_temp idx
+        end
         
     end
     save([directory '/data/primary_sink_coordinates_' output_name '.mat'], 's')
