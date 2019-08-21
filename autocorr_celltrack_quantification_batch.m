@@ -92,41 +92,41 @@ save(fullfile(parent_d, ...
         'wound_autocorr_celltrack_weighted_avg.mat'), ...
         'weighted_avg');
     
-%% use spline fitting instead of walking average %%
-
-% this should account for the different frame intervals
-figure
-
-frame_int = [7; 5; 7; 5];    % [s]
-
-for k = 1:file_list
-    
-    x = 1:frame_int(k,1):max_len*frame_int(k,1);
-    [xData, yData] = prepareCurveData(x,out(:,k));
-    
-    % Set up fittype and options.
-    ft = fittype('smoothingspline');
-    
-    % Fit model to data.
-    [fitresult, gof] = fit(xData, yData, ft);
-    
-    out_fit(:,k) = fitresult(1:5:max_len*5);
-    plot(x, out(:,k), 'k.');
-    hold on
-    plot(1:5:max_len*5, out_fit(:,k))
-    hold on
-    
-    waitforbuttonpress
-    
-    clear x
-end
-
-mask = isnan(out);
-out_fit(mask == 1) = NaN;
-
-x_avg = 1:5:max_len*5;  % [s]
-fit_avg = nanmean(out_fit,2);
-
-save(fullfile(parent_d, ...
-        'wound_autocorr_celltrack_fit_avg.mat'), ...
-        'fit_avg', 'x_avg');
+% %% use spline fitting instead of walking average %%
+% 
+% % this should account for the different frame intervals
+% figure
+% 
+% frame_int = [7; 5; 7; 5];    % [s]
+% 
+% for k = 1:file_list
+%     
+%     x = 1:frame_int(k,1):max_len*frame_int(k,1);
+%     [xData, yData] = prepareCurveData(x,out(:,k));
+%     
+%     % Set up fittype and options.
+%     ft = fittype('smoothingspline');
+%     
+%     % Fit model to data.
+%     [fitresult, gof] = fit(xData, yData, ft);
+%     
+%     out_fit(:,k) = fitresult(1:5:max_len*5);
+%     plot(x, out(:,k), 'k.');
+%     hold on
+%     plot(1:5:max_len*5, out_fit(:,k))
+%     hold on
+%     
+%     waitforbuttonpress
+%     
+%     clear x
+% end
+% 
+% mask = isnan(out);
+% out_fit(mask == 1) = NaN;
+% 
+% x_avg = 1:5:max_len*5;  % [s]
+% fit_avg = nanmean(out_fit,2);
+% 
+% save(fullfile(parent_d, ...
+%         'wound_autocorr_celltrack_fit_avg.mat'), ...
+%         'fit_avg', 'x_avg');

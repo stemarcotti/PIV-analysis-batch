@@ -12,9 +12,9 @@ d = zeros(N, 1);
 % slide vector to calculate auto-correlation
 for n = 1:N
     for k = 1:N - lag
-        A = [vec(k,1) vec(k,2)];
-        B = [vec(k + lag,1) vec(k + lag,2)];
-        cosvec = dot(A,B)./(norm(A).*norm(B));
+        A_star = [vec(k,1) vec(k,2)];
+        B_star = [vec(k + lag,1) vec(k + lag,2)];
+        cosvec = dot(A_star,B_star)./(norm(A_star).*norm(B_star));
         % sum cosine values
         d(n,1) = d(n,1) + cosvec;
     end
