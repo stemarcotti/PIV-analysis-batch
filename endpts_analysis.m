@@ -48,10 +48,16 @@ for k = 1:nt
     condition = s_coord(:,3)==0;
     s_coord(condition,:) = [];
     
+    % remove coordinates outside image size
+    condition1 = s_coord(:,2) > size(im,2);
+    condition2 = s_coord(:,1) > size(im,1);
+    condition1and2 = condition1 | condition2;
+    s_coord(condition1and2,:) = [];
+    
     % remove coordinates outside eroded image
     idx = [];
     for ii = 1:size(s_coord,1)
-        if erode_cell(ceil(s_coord(ii,2)), ceil(s_coord(ii,1))) == 0
+        if erode_cell(ceil(s_coord(ii,2)), ceil(s_coord(ii,1))) == 0        
             idx = [idx, ii];
         end
     end

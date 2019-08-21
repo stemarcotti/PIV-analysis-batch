@@ -7,7 +7,7 @@ parent_d = uigetdir('');
 
 matlab_folder = cd;
 cd(parent_d)
-listing = dir('**/flow_streamlines_endpts_erode_wcb*.mat');
+listing = dir('**/streamlines_percentage_sinks_erode_wcb*.mat');
 cd(matlab_folder)
 
 %% cap the analysis at the length of the shortest movie [s] (PERSISTENCE)
@@ -16,7 +16,7 @@ length_shortest = 180; % [s]
 
 %% %%
 n_files = length(listing);
-n_sinks_average = zeros(n_files,1);
+strength_sinks_average = zeros(n_files,1);
 
 for file_list = 1:n_files
     
@@ -39,15 +39,11 @@ for file_list = 1:n_files
     nt_capped = round(length_shortest/rec_speed);   % [frames]
     
     % load streamlines
-    s = load(fullfile(directory, file));
-    s = s.stream_end_pts;
+    s_percentage = load(fullfile(directory, file));
+    s_percentage = s_percentage.f_percent;
     
-    n_sinks = zeros(nt_capped-1,1);
-    for jj = 1:nt_capped-1
-        n_sinks(jj,1) = size(s(jj).xf,1);
-    end
-    
-    n_sinks_average(file_list,1) = round(nanmean(n_sinks));
+    strength_sink = s_percentage(1:nt_capped-1,1);
+    strength_sinks_average(file_list,1) = nanmean(strength_sink);
     
 end
 
